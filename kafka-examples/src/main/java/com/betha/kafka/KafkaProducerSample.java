@@ -1,5 +1,7 @@
 package com.betha.kafka;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -22,10 +24,12 @@ public class KafkaProducerSample {
         properties.setProperty("linger.ms", "1");
 
         try (Producer<String, String> producer = new KafkaProducer<>(properties)) {
-            for (int i = 0; i < 1000; i++) {
+            final LocalDateTime start = LocalDateTime.now();
+            for (int i = 0; i < 100000; i++) {
                 final ProducerRecord<String, String> record = new ProducerRecord<>("first_topic", "" + i, "message: " + i);
                 producer.send(record);
             }
+            System.out.println("Took " + Duration.between(start, LocalDateTime.now()));
         }
     }
 }
